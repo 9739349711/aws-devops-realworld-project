@@ -1,15 +1,39 @@
 pipeline {
     agent any
+
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                echo 'Code checkout placeholder'
+                git branch: 'develop',
+                    url: 'https://github.com/9739349711/aws-devops-realworld-project.git'
             }
         }
+
         stage('Build') {
             steps {
-                echo 'Build stage placeholder'
+                sh '''
+                  cd app
+                  npm install
+                '''
             }
+        }
+
+        stage('Test') {
+            steps {
+                sh '''
+                  cd app
+                  npm test
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'CI Pipeline Successful ✅'
+        }
+        failure {
+            echo 'CI Pipeline Failed ❌'
         }
     }
 }
